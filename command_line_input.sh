@@ -1,0 +1,1 @@
+sh snp_bcftools*.sh

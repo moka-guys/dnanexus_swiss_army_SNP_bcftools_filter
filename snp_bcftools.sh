@@ -7,7 +7,7 @@ done
 echo $fasta_file
 
 #get BED file 
-bedfile=*newkit_bedfile_b38.bed 
+bedfile=*.bed 
 echo $bedfile
 
 #get header 
@@ -23,19 +23,26 @@ for vcf in *.g.vcf.gz; do
     tabix -p vcf $vcf
     #conert gvcf to vcf
     #-R region of interest -f fasta_file 
+    #-0z specifies output format z=zipped
     echo "convert to vcf"
     bcftools convert --gvcf2vcf -R $bedfile -f $fasta_file -Oz -o $vcf_filename.sites.vcf.gz $vcf
     echo "remove unused alleles"
     #only keep SNPs of interest
+    #-0z specifies output format z=zipped
     bcftools view --trim-alt-alleles -Oz -o $vcf_filename.sites_present.vcf.gz $vcf_filename.sites.vcf.gz
     echo "annotating header"
     #annotate header with kit name Nimagen SNP Genotyping v2.0
+    #-0z specifies output format z=zipped
+    #-h header file
     bcftools annotate -h $header_file -Oz -o $vcf_filename.sites_present_reheader.vcf.gz $vcf_filename.sites_present.vcf.gz
     echo "filter"
-    #Only keep SNPs with read depth more than 5
-    #-m sets filter column to pass
+    #-i only keep SNPs with DP (within format column) > 5
+    #-mx The "x" mode resets filters of sites which pass to "PASS"
+    #-0z specifies output format z=zipped
     bcftools filter -i 'FMT/DP>5' -m x -Oz -o $vcf_filename.sites_present_reheader_filtered.vcf.gz $vcf_filename.sites_present_reheader.vcf.gz
     #decompose vcf; split biallelic regions to seperate lines. 
+    #split multiallelic sites into biallelic records (-)
+    #-0z specifies output format z=zipped
     echo "normalise and decompose"
     bcftools norm -m - -Oz -o $vcf_filename.sites_present_reheader_filtered_normalised.vcf.gz $vcf_filename.sites_present_reheader_filtered.vcf.gz
     #zcat $vcf_filename.sites_present_reheader_filtered_normalised.vcf.gz

@@ -7,7 +7,7 @@ The input files for this app includes a bash script(snp_bcftools*.sh) and compre
 The app's "command line" input is used to execute the above bash script. This command is recorded in command_line_input.sh
 
 ## How the app works
-snp_bcftools*.sh loops through all the GCVF files, uncompresses them, annotates the header, removes any unused alleles, removes any variants with DP < 5 and decomposes the GVCF using BCFtools (v1.9).
+snp_bcftools*.sh loops through all the GCVfs,creates an index, converts to vcf, keeps SNPs of interest,annotates header with kit name uncompresses them, annotates the header, only keeps SNPs with DP > 5 and decomposes the VCF using BCFtools (v1.9).
 
 ## Output
-Filtered VCF files are named filtered_normalised.vcf.gz The app's "output folder" argument can be used to output files to the expected directory.
+Filtered VCFs have a suffix of sites_present_reheader_filtered.vcf.gz The app's "output folder" argument can be used to output files to the expected directory.

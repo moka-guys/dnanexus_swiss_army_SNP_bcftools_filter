@@ -16,4 +16,4 @@ snp_bcftools*.sh loops through each gCVFs and does the following:
 - normalises and decomposes the VCF (bcftools norm)
 
 ## Output
-Filtered VCFs have a suffix of sites_present_reheader_filtered.vcf.gz The app's "output folder" argument can be used to output files to the expected directory.
+Filtered VCFs have a suffix of sites_present_reheader_filtered.vcf.gz The output files are saved to / unless the output location is specified when setting off the app

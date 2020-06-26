@@ -27,7 +27,7 @@ for vcf in *.g.vcf.gz; do
     echo "convert to vcf"
     bcftools convert --gvcf2vcf -R $bedfile -f $fasta_file -Oz -o $vcf_filename.sites.vcf.gz $vcf
     echo "remove unused alleles"
-    #only keep SNPs of interest
+    #--trim-alt-alleles: trim alternate alleles not seen in subset
     #-0z specifies output format z=zipped
     bcftools view --trim-alt-alleles -Oz -o $vcf_filename.sites_present.vcf.gz $vcf_filename.sites.vcf.gz
     echo "annotating header"
@@ -37,13 +37,14 @@ for vcf in *.g.vcf.gz; do
     bcftools annotate -h $header_file -Oz -o $vcf_filename.sites_present_reheader.vcf.gz $vcf_filename.sites_present.vcf.gz
     echo "filter"
     #-i only keep SNPs with DP (within format column) > 5
-    #-mx The "x" mode resets filters of sites which pass to "PASS"
+    #-m x The "x" mode resets filters of sites which pass to "PASS"
     #-0z specifies output format z=zipped
     bcftools filter -i 'FMT/DP>5' -m x -Oz -o $vcf_filename.sites_present_reheader_filtered.vcf.gz $vcf_filename.sites_present_reheader.vcf.gz
     #decompose vcf; split biallelic regions to seperate lines. 
     #split multiallelic sites into biallelic records (-)
     #-0z specifies output format z=zipped
     echo "normalise and decompose"
+    -m split multiallelic sites into biallelic records (-) 
     bcftools norm -m - -Oz -o $vcf_filename.sites_present_reheader_filtered_normalised.vcf.gz $vcf_filename.sites_present_reheader_filtered.vcf.gz
     #zcat $vcf_filename.sites_present_reheader_filtered_normalised.vcf.gz
 done

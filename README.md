@@ -7,7 +7,13 @@ The input files for this app includes a bash script(snp_bcftools*.sh) and compre
 The app's "command line" input is used to execute the above bash script. This command is recorded in command_line_input.sh
 
 ## How the app works
-snp_bcftools*.sh loops through all the GCVfs,creates an index, converts to vcf, keeps SNPs of interest,annotates header with kit name uncompresses them, annotates the header, only keeps SNPs with DP > 5 and decomposes the VCF using BCFtools (v1.9).
+snp_bcftools*.sh loops through each gCVFs and does the following:
+- creates index for VCF (tabix)
+- converts gVCF to VCF (bcftools convert)
+- trims alt alleles (bcftools view)
+- annotates VCF header with source=Nimagenkit_v2 (bcftools annotate)
+- flters VCF keeps SNPs with DP (within format column) > 5 (bcftools filter)
+- decomposes the VCF (bcftools norm)
 
 ## Output
 Filtered VCFs have a suffix of sites_present_reheader_filtered.vcf.gz The app's "output folder" argument can be used to output files to the expected directory.

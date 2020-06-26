@@ -33,7 +33,7 @@ for vcf in *.g.vcf.gz; do
     echo "annotating header"
     #annotate header with kit name Nimagen SNP Genotyping v2.0
     #-0z specifies output format z=zipped
-    #-h header file
+    #-h header file contains single line: source=Nimagenkit_v2
     bcftools annotate -h $header_file -Oz -o $vcf_filename.sites_present_reheader.vcf.gz $vcf_filename.sites_present.vcf.gz
     echo "filter"
     #-i only keep SNPs with DP (within format column) > 5

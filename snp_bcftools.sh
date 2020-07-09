@@ -44,7 +44,7 @@ for vcf in *.g.vcf.gz; do
     #split multiallelic sites into biallelic records (-)
     #-0z specifies output format z=zipped
     echo "normalise and decompose"
-    -m split multiallelic sites into biallelic records (-) 
+    #-m - = split multiallelic sites into biallelic records
     bcftools norm -m - -Oz -o $vcf_filename.sites_present_reheader_filtered_normalised.vcf.gz $vcf_filename.sites_present_reheader_filtered.vcf.gz
     #zcat $vcf_filename.sites_present_reheader_filtered_normalised.vcf.gz
 done

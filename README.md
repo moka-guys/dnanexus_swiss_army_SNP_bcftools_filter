@@ -13,7 +13,8 @@ snp_bcftools*.sh loops through each gCVFs and does the following:
 - trims alt alleles (bcftools view)
 - annotates VCF header with source=Nimagenkit_v2 (bcftools annotate)
 - flters VCF keeps SNPs with DP (within format column) > 5 (bcftools filter)
-- normalises and decomposes the VCF (bcftools norm)
+- changes sample name in the VCF to DNA number (bcftools reheader)
+- normalises, decomposes and uncompresses the VCF (bcftools norm)
 
 ## Output
-Filtered VCFs have a suffix of sites_present_reheader_filtered.vcf.gz The output files are saved to / unless the output location is specified when setting off the app
+Filtered VCFs have a suffix of sites_present_reheader_filtered.vcf.gz. The final filtered VCF is uncompressed (.vcf) The output files are saved to / unless the output location is specified when setting off the app

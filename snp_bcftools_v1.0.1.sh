@@ -14,6 +14,7 @@ echo $bedfile
 header_file=*header.csv
 echo $header_file
 
+mkdir -p intermediate_files
 #process vcf file 
 for vcf in *.g.vcf.gz; do
     vcf_filename="$(echo $vcf | cut -d '.' -f1)"
@@ -29,6 +30,8 @@ for vcf in *.g.vcf.gz; do
     #-0z specifies output format z=zipped
     echo "convert to vcf"
     bcftools convert --gvcf2vcf -R $bedfile -f $fasta_file -Oz -o $vcf_filename.sites.vcf.gz $vcf
+    # remove input vcf once it's no longer used as when all intermediate files are moved later it's treated as a new file.
+    rm $vcf*
     echo "remove unused alleles"
     #--trim-alt-alleles: trim alternate alleles not seen in subset
     #-0z specifies output format z=zipped
@@ -54,4 +57,9 @@ for vcf in *.g.vcf.gz; do
     #-m - = split multiallelic sites into biallelic records
     #-Ov = output type unzipped vcf
     bcftools norm -m - -Ov -o $vcf_filename.sites_present_reheader_filtered_normalised.vcf $vcf_filename.sites_present_renamed_reheader_filtered.vcf.gz
+    echo "move intermediate files into subfolder"
+    mv *.vcf.gz* intermediate_files/
+    mv $vcf_filename.dnanumber.txt intermediate_files/
 done
+echo "remove fasta file and index created"
+rm $fasta_file $fasta_file.fai

@@ -7,7 +7,7 @@ Required input files for the swiss army knife app:
 * A bash script (snp_bcftools*.sh) from this repo that describes the processing required.
 * Compressed GVCF file(s) produced by Sentieon Fastq to VCF app (*markdup_Haplotyper.g.vcf.gz).
 * SNP header.csv - a template header to insert into the vcf.
-* BED file - used to filter the 
+* BED file - used to restrict the sites to the expected SNPs (when converting gVCF to VCF)
 
 The app's "command line" input is used to execute the above bash script. This command is recorded in command_line_input.sh
 

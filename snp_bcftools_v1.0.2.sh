@@ -14,7 +14,7 @@ echo $bedfile
 header_file=*header.csv
 echo $header_file
 
-mkdir -p intermediate_files
+mkdir -p output/intermediate_files QC
 #process vcf file 
 for vcf in *.g.vcf.gz; do
     vcf_filename="$(echo $vcf | cut -d '.' -f1)"
@@ -56,10 +56,12 @@ for vcf in *.g.vcf.gz; do
     echo "normalise and decompose"
     #-m - = split multiallelic sites into biallelic records
     #-Ov = output type unzipped vcf
-    bcftools norm -m - -Ov -o $vcf_filename.sites_present_reheader_filtered_normalised.vcf $vcf_filename.sites_present_renamed_reheader_filtered.vcf.gz
+    bcftools norm -m - -Ov -o output/$vcf_filename.sites_present_reheader_filtered_normalised.vcf $vcf_filename.sites_present_renamed_reheader_filtered.vcf.gz
+    # run bcftools stats
+    bcftools stats output/$vcf_filename.sites_present_reheader_filtered_normalised.vcf > QC/$vcf_filename.stats
     echo "move intermediate files into subfolder"
-    mv *.vcf.gz* intermediate_files/
-    mv $vcf_filename.dnanumber.txt intermediate_files/
+    mv *.vcf.gz* output/intermediate_files/
+    mv $vcf_filename.dnanumber.txt output/intermediate_files/
 done
 echo "remove fasta file and index created"
 rm $fasta_file $fasta_file.fai
